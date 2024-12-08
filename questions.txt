@@ -1,0 +1,2 @@
+testing;www.rul.com;Array;Easy;false;
+zak is stupid;zakisstupid.com;Array;Easy;true;
