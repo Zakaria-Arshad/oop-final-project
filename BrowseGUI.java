@@ -1,14 +1,12 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseGUI {
     private JTable questionsTable;
     private JComboBox<String> filterComboBox;
+    private JComboBox<String> dataStructureFilterComboBox;
     private JCheckBox completionFilterCheckBox;
     private JButton refreshButton;
     private JButton editButton;
@@ -20,7 +18,7 @@ public class BrowseGUI {
     public BrowseGUI(LeetCodeTrackerSystem system) {
         this.system = system;
 
-        // getting the quesitons
+        // get all questions
         QuestionManager questionManager = system.getQuestionManager();
         List<Question> questions = questionManager.getAllQuestions();
         // DEBUG PRINT
@@ -31,23 +29,22 @@ public class BrowseGUI {
         tableModel.addColumn("URL");
         tableModel.addColumn("Type");
         tableModel.addColumn("Difficulty");
-        
 
-        // adding the questions to table
+        // populate table with questions
         for (Question question : questions) {
             tableModel.addRow(new Object[] {
                 question.getTitle(),
                 question.getUrl(),
                 question.getDataStructureType(),
-                question.getDifficulty(),
-              
+                question.getDifficulty()
             });
         }
 
-        // Create the questionsTable
         questionsTable = new JTable(tableModel);
 
+        // filters
         filterComboBox = new JComboBox<>(new String[]{"All", "Easy", "Medium", "Hard"});
+        dataStructureFilterComboBox = new JComboBox<>(getDataStructureTypes(questions));
         completionFilterCheckBox = new JCheckBox("Show Completed");
         refreshButton = new JButton("Refresh");
         editButton = new JButton("Edit Question");
@@ -58,107 +55,93 @@ public class BrowseGUI {
         addActionListeners();
     }
 
+    private String[] getDataStructureTypes(List<Question> questions) {
+        // get the specific data structure types
+        List<String> types = new ArrayList<>();
+        types.add("All");
+        for (Question question : questions) {
+            if (!types.contains(question.getDataStructureType())) {
+                types.add(question.getDataStructureType());
+            }
+        }
+        return types.toArray(new String[0]);
+    }
+
     private void initUI() {
         JFrame frame = new JFrame("Browse Questions");
         JPanel panel = new JPanel();
-    
+
         panel.add(filterComboBox);
+        panel.add(dataStructureFilterComboBox);
         panel.add(completionFilterCheckBox);
         panel.add(refreshButton);
         panel.add(new JScrollPane(questionsTable));
         panel.add(editButton);
         panel.add(deleteButton);
         panel.add(backButton);
-    
+
         frame.add(panel);
-        frame.setSize(600, 400);
+        frame.setSize(700, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 
     private void refreshQuestionsTable() {
-        // gets updated questions (assuming something wrote to it so we need to refresh it)
+        // updated qs
         List<Question> allQuestions = system.getQuestionManager().getAllQuestions();
-    
-        // getting filters, if needed
+
+        // filters
         String selectedDifficulty = (String) filterComboBox.getSelectedItem();
+        String selectedDataStructure = (String) dataStructureFilterComboBox.getSelectedItem();
         boolean showCompleted = completionFilterCheckBox.isSelected();
-    
-        // filter if needed (not will always be used)
+
+        // apply the filters
         List<Question> filteredQuestions = new ArrayList<>();
         for (Question question : allQuestions) {
             if ((selectedDifficulty.equals("All") || question.getDifficulty().equalsIgnoreCase(selectedDifficulty)) &&
+                (selectedDataStructure.equals("All") || question.getDataStructureType().equalsIgnoreCase(selectedDataStructure)) &&
                 (!showCompleted || question.isCompleted())) {
                 filteredQuestions.add(question);
             }
         }
 
-    
+        // update the table
         DefaultTableModel tableModel = (DefaultTableModel) questionsTable.getModel();
-    
-        // reset table
-        tableModel.setRowCount(0);
-    
-        // add the new questions back now
+        tableModel.setRowCount(0); // Reset table
         for (Question question : filteredQuestions) {
             tableModel.addRow(new Object[]{
                 question.getTitle(),
                 question.getUrl(),
                 question.getDataStructureType(),
-                question.getDifficulty(),
-                
+                question.getDifficulty()
             });
         }
     }
 
     private void addActionListeners() {
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshQuestionsTable();
+        refreshButton.addActionListener(_ -> refreshQuestionsTable());
+
+        filterComboBox.addActionListener(_ -> refreshQuestionsTable());
+
+        dataStructureFilterComboBox.addActionListener(_ -> refreshQuestionsTable());
+
+        completionFilterCheckBox.addActionListener(_ -> refreshQuestionsTable());
+
+        editButton.addActionListener(_ -> {
+            Question selectedQuestion = getSelectedQuestion();
+            if (selectedQuestion != null) {
+                new EditGUI(system, selectedQuestion);
             }
         });
 
-        filterComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshQuestionsTable();
-            }
-        });
-    
-        completionFilterCheckBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshQuestionsTable();
+        deleteButton.addActionListener(_ -> {
+            Question selectedQuestion = getSelectedQuestion();
+            if (selectedQuestion != null) {
+                new DeleteGUI(system, selectedQuestion);
             }
         });
 
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Question selectedQuestion = getSelectedQuestion();
-                if (selectedQuestion != null) {
-                    new EditGUI(system, selectedQuestion);
-                }
-            }
-        });
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Question selectedQuestion = getSelectedQuestion();
-                if (selectedQuestion != null) {
-                    new DeleteGUI(system, selectedQuestion);
-                }
-            }
-        });
-
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ((JFrame) SwingUtilities.getWindowAncestor(backButton)).dispose();
-            }
-        });
+        backButton.addActionListener(_ -> ((JFrame) SwingUtilities.getWindowAncestor(backButton)).dispose());
     }
 
     private Question getSelectedQuestion() {
@@ -167,13 +150,11 @@ public class BrowseGUI {
             DefaultTableModel tableModel = (DefaultTableModel) questionsTable.getModel();
             String title = (String) tableModel.getValueAt(selectedRow, 0);
             String url = (String) tableModel.getValueAt(selectedRow, 1);
-            
-    
-            // get the questions again
+
+            // get questions and find the selected one
             QuestionManager questionManager = system.getQuestionManager();
             List<Question> questions = questionManager.getAllQuestions();
-    
-            // look for the question we want
+
             for (Question question : questions) {
                 if (question.getTitle().equals(title) && question.getUrl().equals(url)) {
                     return question;
@@ -183,4 +164,5 @@ public class BrowseGUI {
         return null;
     }
 }
+
 
