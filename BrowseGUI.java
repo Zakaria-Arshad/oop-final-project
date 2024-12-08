@@ -119,29 +119,29 @@ public class BrowseGUI {
     }
 
     private void addActionListeners() {
-        refreshButton.addActionListener(_ -> refreshQuestionsTable());
+        refreshButton.addActionListener(e -> refreshQuestionsTable());
 
-        filterComboBox.addActionListener(_ -> refreshQuestionsTable());
+        filterComboBox.addActionListener(e -> refreshQuestionsTable());
 
-        dataStructureFilterComboBox.addActionListener(_ -> refreshQuestionsTable());
+        dataStructureFilterComboBox.addActionListener(e -> refreshQuestionsTable());
 
-        completionFilterCheckBox.addActionListener(_ -> refreshQuestionsTable());
+        completionFilterCheckBox.addActionListener(e -> refreshQuestionsTable());
 
-        editButton.addActionListener(_ -> {
+        editButton.addActionListener(e -> {
             Question selectedQuestion = getSelectedQuestion();
             if (selectedQuestion != null) {
                 new EditGUI(system, selectedQuestion);
             }
         });
 
-        deleteButton.addActionListener(_ -> {
+        deleteButton.addActionListener(e -> {
             Question selectedQuestion = getSelectedQuestion();
             if (selectedQuestion != null) {
                 new DeleteGUI(system, selectedQuestion);
             }
         });
 
-        backButton.addActionListener(_ -> ((JFrame) SwingUtilities.getWindowAncestor(backButton)).dispose());
+        backButton.addActionListener(e -> ((JFrame) SwingUtilities.getWindowAncestor(backButton)).dispose());
     }
 
     private Question getSelectedQuestion() {
