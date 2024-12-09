@@ -11,32 +11,33 @@ public class QuestionManager {
     }
 
     public void addQuestion(Question question) {
-        questions.add(question);
+        this.questions.add(question);
         // DEBUG PRINT, CAN DELETE IT 
         System.out.println(questions);
         saveQuestions();
     }
 
+
     public void editQuestion(Question oldQuestion, Question updatedQuestion) {
-        int index = questions.indexOf(oldQuestion);
+        int index = this.questions.indexOf(oldQuestion);
         if (index != -1) {
-            questions.set(index, updatedQuestion);
+            this.questions.set(index, updatedQuestion);
         }
         saveQuestions();
     }
 
     public void deleteQuestion(Question question) {
-        questions.remove(question);
+        this.questions.remove(question);
         saveQuestions();
     }
 
     public List<Question> getAllQuestions() {
-        return new ArrayList<>(questions);
+        return new ArrayList<>(this.questions);
     }
 
     public List<Question> filterQuestionsByCompletion(boolean completed) {
         List<Question> filteredQuestions = new ArrayList<>();
-        for (Question q : questions) {
+        for (Question q : this.questions) {
             if (q.isCompleted() == completed) {
                 filteredQuestions.add(q);
             }
@@ -56,11 +57,12 @@ public class QuestionManager {
     
 
     public void loadQuestions() {
-        questions = fileManager.loadQuestions();
+        this.questions = fileManager.loadQuestions();
+        System.out.println(this.questions + "HI");
     }
 
     public void saveQuestions() {
-        fileManager.saveQuestions(questions);
+        fileManager.saveQuestions(this.questions);
     }
 }
 

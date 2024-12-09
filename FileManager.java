@@ -33,9 +33,9 @@ public class FileManager {
     public void saveQuestions(List<Question> questions) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Question q : questions) {
-                writer.write(String.format("%s;%s;%s;%s;%b;\n",
+                writer.write(String.format("%s;%s;%s;%s;%b;%s;\n",
                     q.getTitle(), q.getUrl(), q.getDataStructureType(),
-                    q.getDifficulty(), q.isCompleted()));
+                    q.getDifficulty(), q.isCompleted(), q.getNoteContent()));
             }
         } catch (IOException e) {
             System.err.println("Error writing questions file: " + e.getMessage());

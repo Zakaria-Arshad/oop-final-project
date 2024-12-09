@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BrowseGUI {
@@ -31,9 +32,6 @@ public class BrowseGUI {
         tableModel.addColumn("Difficulty");
         tableModel.addColumn("Notes");
 
-        tableModel.addRow(new Object[] {"Title1", "URL1", "Array", "Easy", "Note1"});
-tableModel.addRow(new Object[] {"Title2", "URL2", "List", "Medium", "Note2"});
-
         // populate table with questions
         for (Question question : questions) {
             System.out.println("Note content for " + question.getTitle() + ": " + question.getNoteContent());
@@ -63,14 +61,7 @@ tableModel.addRow(new Object[] {"Title2", "URL2", "List", "Medium", "Note2"});
 
     private String[] getDataStructureTypes(List<Question> questions) {
         // get the specific data structure types
-        List<String> types = new ArrayList<>();
-        types.add("All");
-        for (Question question : questions) {
-            if (!types.contains(question.getDataStructureType())) {
-                types.add(question.getDataStructureType());
-            }
-        }
-        return types.toArray(new String[0]);
+        return new String[] {"All", "Array", "String", "Tree", "Graph"};
     }
 
     private void initUI() {
@@ -95,6 +86,8 @@ tableModel.addRow(new Object[] {"Title2", "URL2", "List", "Medium", "Note2"});
     private void refreshQuestionsTable() {
         // updated qs
         List<Question> allQuestions = system.getQuestionManager().getAllQuestions();
+        // print in console
+        System.out.println(allQuestions);
 
         // filters
         String selectedDifficulty = (String) filterComboBox.getSelectedItem();
