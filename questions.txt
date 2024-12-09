@@ -1,2 +1,2 @@
-testing;www.rul.com;Array;Easy;false;
-asdfl;aklsdjf;String;Medium;false;
+testing;www.rul.com;Array;Easy;false;easy question
+asdfl;aklsdjf;String;Medium;false;hard question

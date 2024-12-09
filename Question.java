@@ -4,13 +4,15 @@ public class Question {
     private String dataStructureType;
     private String difficulty;
     private boolean completed;
+    private Note note;
 
-    public Question(String title, String url, String dataStructureType, String difficulty, boolean completed) {
+    public Question(String title, String url, String dataStructureType, String difficulty, boolean completed, String noteContent) {
         this.title = title;
         this.url = url;
         this.dataStructureType = dataStructureType;
         this.difficulty = difficulty;
         this.completed = completed;
+        this.note = new Note(noteContent);
     }
 
     public String getTitle() {
@@ -51,6 +53,14 @@ public class Question {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public String getNoteContent() {
+        return note.getContent();
+    }
+
+    public void setNoteContent(String noteContent) {
+        note.setContent(noteContent);
     }
 
     @Override

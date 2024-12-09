@@ -9,17 +9,17 @@ public class FileManager {
         this.filePath = filePath;
     }
 
-    // load the questions from the questions.txt file: title;url;type;difficulty;completed
+    // load the questions from the questions.txt file: title;url;type;difficulty;completed;notes
     public List<Question> loadQuestions() {
         List<Question> questions = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
-                if (parts.length == 5) {
+                if (parts.length == 6) {
                     questions.add(new Question(
                     parts[0], parts[1], parts[2], parts[3],
-                    Boolean.parseBoolean(parts[4])
+                    Boolean.parseBoolean(parts[4]), parts[5]
                 ));
                 }
             }

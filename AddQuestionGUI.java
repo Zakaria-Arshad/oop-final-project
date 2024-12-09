@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 public class AddQuestionGUI {
     private JTextField titleField;
     private JTextField urlField;
+    private JTextField notesField;
     private JComboBox<String> typeComboBox;
     private JComboBox<String> difficultyComboBox;
     private JCheckBox completedCheckBox;
@@ -17,6 +18,7 @@ public class AddQuestionGUI {
 
         titleField = new JTextField(20);
         urlField = new JTextField(20);
+        notesField = new JTextField(20);
         typeComboBox = new JComboBox<>(new String[]{"Array", "String", "Tree", "Graph"});
         difficultyComboBox = new JComboBox<>(new String[]{"Easy", "Medium", "Hard"});
         completedCheckBox = new JCheckBox("Completed");
@@ -40,6 +42,8 @@ public class AddQuestionGUI {
         panel.add(new JLabel("Difficulty:"));
         panel.add(difficultyComboBox);
         panel.add(completedCheckBox);
+        panel.add(new JLabel("Notes:"));
+        panel.add(notesField);
         panel.add(submitButton);
         panel.add(cancelButton);
 
@@ -58,7 +62,8 @@ public class AddQuestionGUI {
                         urlField.getText(),
                         (String) typeComboBox.getSelectedItem(),
                         (String) difficultyComboBox.getSelectedItem(),
-                        completedCheckBox.isSelected()
+                        completedCheckBox.isSelected(),
+                        notesField.getText()
                 );
                 system.getQuestionManager().addQuestion(question);
                 // print in console

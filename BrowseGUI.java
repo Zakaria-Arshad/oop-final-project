@@ -22,21 +22,27 @@ public class BrowseGUI {
         QuestionManager questionManager = system.getQuestionManager();
         List<Question> questions = questionManager.getAllQuestions();
         // DEBUG PRINT
-        System.out.println(questions);
+        // System.out.println(questions.get(0).getNoteContent());
 
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Title");
         tableModel.addColumn("URL");
         tableModel.addColumn("Type");
         tableModel.addColumn("Difficulty");
+        tableModel.addColumn("Notes");
+
+        tableModel.addRow(new Object[] {"Title1", "URL1", "Array", "Easy", "Note1"});
+tableModel.addRow(new Object[] {"Title2", "URL2", "List", "Medium", "Note2"});
 
         // populate table with questions
         for (Question question : questions) {
+            System.out.println("Note content for " + question.getTitle() + ": " + question.getNoteContent());
             tableModel.addRow(new Object[] {
                 question.getTitle(),
                 question.getUrl(),
                 question.getDataStructureType(),
-                question.getDifficulty()
+                question.getDifficulty(),
+                question.getNoteContent()
             });
         }
 
@@ -105,15 +111,18 @@ public class BrowseGUI {
             }
         }
 
+       
         // update the table
         DefaultTableModel tableModel = (DefaultTableModel) questionsTable.getModel();
         tableModel.setRowCount(0); // Reset table
         for (Question question : filteredQuestions) {
+            System.out.println("Note content for " + question.getTitle() + ": " + question.getNoteContent());
             tableModel.addRow(new Object[]{
                 question.getTitle(),
                 question.getUrl(),
                 question.getDataStructureType(),
-                question.getDifficulty()
+                question.getDifficulty(),
+                question.getNoteContent()
             });
         }
     }
