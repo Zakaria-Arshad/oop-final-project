@@ -1,2 +1,4 @@
-testing;www.rul.com;Array;Easy;false;easy question
-asdfl;aklsdjf;String;Medium;false;hard question
+testing;www.rul.com;Array;Easy;false;
+asdfl;aklsdjf;String;Medium;false;
+hello;hello;Array;Easy;false;
+new note question;notequestion.com;Array;Easy;false;

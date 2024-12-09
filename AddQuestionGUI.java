@@ -57,6 +57,8 @@ public class AddQuestionGUI {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Submit button clicked");
+                System.out.println("notes: "+ notesField.getText());
                 Question question = new Question(
                         titleField.getText(),
                         urlField.getText(),
